@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+<!-- 상단 @Autowired 선행 객체 자동 등록 -->
+<context:annotation-config />
+
+<!-- TEST_1 @Controller 자동으로 Bean객체가 되지 않는다-->
+<bean id ="helloController" class="com.controller.HelloController"></bean>
+	
+
+<!-- Test_2
+	하나의 요청 주소를 (method 판단)
+	GET (화면) > 함수호출
+	POST (처리) > 처리함수 호출
+ -->
+ 
+ 
+<bean class="com.controller.NewArticleController"></bean>
+<bean class="com.service.ArticleService"></bean>
+
+
+<!-- Test_3 -->
+<bean class="com.controller.OrderController"></bean>
+
+
+<bean id="internalResourceViewResolver"  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean> 
+
+
+</beans>
+
+

@@ -1,0 +1,19 @@
+body {
+  margin: 40px;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fafafa;
+}
+h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.table {
+  background-color: white;
+  border-radius: 10px;
+}
+.btn {
+  border-radius: 6px;
+}
+.form-control {
+  border-radius: 6px;
+}

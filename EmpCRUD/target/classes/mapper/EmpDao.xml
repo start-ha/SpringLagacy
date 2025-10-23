@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.EmpDao">
+
+  <!-- ✅ 사원 목록 (ROWNUM 기반 페이징) -->
+  <select id="empList" parameterType="map" resultType="map">
+    SELECT * FROM (
+        SELECT ROWNUM AS rnum, A.*
+        FROM (
+            SELECT EMPNO, ENAME, JOB, MGR,
+                   TO_CHAR(HIREDATE, 'YYYY-MM-DD') AS HIREDATE,
+                   SAL, COMM, DEPTNO
+            FROM EMP
+            ORDER BY EMPNO
+        ) A
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rnum &gt; #{startRow}
+  </select>
+
+  <!-- ✅ 총 사원 수 -->
+  <select id="getTotalCount" resultType="int">
+    SELECT COUNT(*) FROM EMP
+  </select>
+
+  <!-- ✅ 사원 상세 조회 -->
+  <select id="empDetail" parameterType="int" resultType="map">
+    SELECT EMPNO, ENAME, JOB, MGR,
+           TO_CHAR(HIREDATE, 'YYYY-MM-DD') AS HIREDATE,
+           SAL, COMM, DEPTNO
+    FROM EMP
+    WHERE EMPNO = #{empno}
+  </select>
+
+  <!-- ✅ 사원 등록 -->
+<insert id="empInsert" parameterType="map">
+  INSERT INTO EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+  VALUES (
+    #{empno, jdbcType=NUMERIC},
+    #{ename, jdbcType=VARCHAR},
+    #{job, jdbcType=VARCHAR},
+    #{mgr, jdbcType=NUMERIC},
+    SYSDATE,
+    #{sal, jdbcType=NUMERIC},
+    #{comm, jdbcType=NUMERIC},
+    #{deptno, jdbcType=NUMERIC}
+  )
+</insert>
+
+
+  <!-- ✅ 사원 수정 -->
+ <update id="empUpdate" parameterType="map">
+  UPDATE EMP
+  SET ENAME = #{ename, jdbcType=VARCHAR},
+      JOB = #{job, jdbcType=VARCHAR},
+      MGR = #{mgr, jdbcType=NUMERIC},
+      HIREDATE = TO_DATE(#{hiredate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+      SAL = #{sal, jdbcType=NUMERIC},
+      COMM = #{comm, jdbcType=NUMERIC},
+      DEPTNO = #{deptno, jdbcType=NUMERIC}
+  WHERE EMPNO = #{empno, jdbcType=NUMERIC}
+</update>
+
+
+  <!-- ✅ 사원 삭제 -->
+  <delete id="empDelete" parameterType="int">
+    DELETE FROM EMP WHERE EMPNO = #{empno}
+  </delete>
+
+  <!-- ✅ 중복 사번 체크 -->
+  <select id="empCheck" parameterType="int" resultType="int">
+    SELECT COUNT(*) FROM EMP WHERE EMPNO = #{empno}
+  </select>
+
+</mapper>
